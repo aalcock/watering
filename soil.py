@@ -121,7 +121,7 @@ if __name__ == "__main__":
             print("  Sensor {}: {}".format(sensor, value))
             soils.append(soils)
 
-        post_thingspeak(temperature, humidity, *soils)
+        post_thingspeak(temperature, humidity, soils[0], soils[1], soils[2], soils[3])
 
     finally:
         finalise()
