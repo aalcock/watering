@@ -75,6 +75,8 @@ def read_a2d(i):
     GPIO.output(SENSOR_SELECTOR_PINS[1], i / 2)
     sum = 0
 
+    # allow time for the sensor to settle
+    time.sleep(0.5)
     # Read the sensor several times
     for j in range(SENSOR_READINGS):
         sum += read_adc(0)
