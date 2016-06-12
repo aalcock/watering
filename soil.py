@@ -14,7 +14,11 @@ SENSOR_SELECTOR_PINS = [23, 24]
 # GPIO pin where the weather sensor is connected
 WEATHER_PIN = 25
 
-TRYS = 4
+# Take several readings and average them
+SENSOR_READINGS = 5
+
+# Number of times to attempt to send the result to the server before failing
+HTTP_TRYS = 4
 
 def initialise():
     """Initialise output pins and devices"""
@@ -70,10 +74,14 @@ def read_a2d(i):
     GPIO.output(SENSOR_SELECTOR_PINS[0], i % 2)
     GPIO.output(SENSOR_SELECTOR_PINS[1], i / 2)
     sum = 0
-    for j in range(5):
+
+    # Read the sensor several times
+    for j in range(SENSOR_READINGS):
         sum += read_adc(0)
         time.sleep(0.1)
-    return sum / 5
+
+    # Return the average
+    return sum / SENSOR_READINGS
 
 
 def post_thingspeak(temperature, humidity, soil1, soil2, soil3, soil4):
@@ -90,7 +98,7 @@ def post_thingspeak(temperature, humidity, soil1, soil2, soil3, soil4):
                "Accept": "text/plain"}
     conn = httplib.HTTPConnection("api.thingspeak.com:80")
 
-    for i in range(TRYS):
+    for i in range(HTTP_TRYS):
         try:
             print ("  About to post to ThingSpeak")
             conn.request("POST", "/update", params, headers)
@@ -102,7 +110,7 @@ def post_thingspeak(temperature, humidity, soil1, soil2, soil3, soil4):
         except:
             print "connection to ThingSpeak.com failed"
 
-        if i < (TRYS - 1):
+        if i < (HTTP_TRYS - 1):
             # wait a while and try again
             time.sleep(9 + 10 ^ i)
 
