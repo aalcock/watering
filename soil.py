@@ -84,7 +84,7 @@ def post_thingspeak(temperature, humidity, soil1, soil2, soil3, soil4):
         'field3': soil1,
         'field4': soil2,
         'field5': soil3,
-        'field6': soil4,
+        'field6': soil4
     })
     headers = {"Content-type": "application/x-www-form-urlencoded",
                "Accept": "text/plain"}
@@ -119,9 +119,9 @@ if __name__ == "__main__":
         for sensor in range(4):
             value = read_a2d(sensor)
             print("  Sensor {}: {}".format(sensor, value))
-            soils.append(soils)
+            soils.append(value)
 
-        post_thingspeak(temperature, humidity, soils[0], soils[1], soils[2], soils[3])
+        post_thingspeak(temperature, humidity, *soils)
 
     finally:
         finalise()
