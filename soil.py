@@ -79,7 +79,9 @@ def read_a2d(i):
     time.sleep(0.5)
     # Read the sensor several times
     for j in range(SENSOR_READINGS):
-        sum += read_adc(0)
+        value = read_adc(0)
+        print("    Sensor {} reading #{}: {}".format(i, j, value))
+        sum += value
         time.sleep(0.1)
 
     # Return the average
