@@ -15,7 +15,7 @@ SENSOR_SELECTOR_PINS = [23, 24]
 WEATHER_PIN = 25
 
 # Take several readings and average them
-SENSOR_READINGS = 5
+SENSOR_READINGS = 9
 
 # Number of times to attempt to send the result to the server before failing
 HTTP_TRYS = 4
@@ -73,19 +73,35 @@ def read_a2d(i):
     assert 0 <= i < 4
     GPIO.output(SENSOR_SELECTOR_PINS[0], i % 2)
     GPIO.output(SENSOR_SELECTOR_PINS[1], i / 2)
-    sum = 0
 
     # allow time for the sensor to settle
     time.sleep(0.5)
     # Read the sensor several times
+    values = []
     for j in range(SENSOR_READINGS):
         value = read_adc(0)
         print("    Sensor {} reading #{}: {}".format(i, j, value))
-        sum += value
         time.sleep(0.1)
 
+    # Now produce the average of the readings, removing the highest and lowest
+    # values (attempting to remove outliers)
+    sum = 0
+    count = 0
+    value_min = min(values)
+    value_max = max(values)
+    for value in values:
+        if value == value_min:
+            # We found the minimum, so ignore it and 'switch off' the min value
+            value_min = None
+        elif value == value_max:
+            # We found the maximum, so ignore it and 'switch off' the max value
+            value_max = None
+        else:
+            count += 1
+            sum += value
+
     # Return the average
-    return sum / SENSOR_READINGS
+    return sum / count
 
 
 def post_thingspeak(temperature, humidity, soil1, soil2, soil3, soil4):
