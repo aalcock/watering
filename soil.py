@@ -80,7 +80,7 @@ def read_a2d(i):
     values = []
     for j in range(SENSOR_READINGS):
         values.append(read_adc(0))
-        print("    Sensor {} reading #{}: {}".format(i, j, values[-1]))
+        # print("    Sensor {} reading #{}: {}".format(i, j, values[-1]))
         time.sleep(0.1)
 
     # Now produce the average of the readings, removing the highest and lowest
@@ -140,8 +140,6 @@ if __name__ == "__main__":
     try:
         print("Reading at {}".format(datetime.datetime.now()))
         humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.DHT11, WEATHER_PIN)
-        if humidity is not None and temperature is not None:
-           print("  Temp={0:0.1f}*C  Humidity={1:0.1f}%".format(temperature, humidity))
 
         soils = []
         for sensor in range(4):
@@ -149,6 +147,8 @@ if __name__ == "__main__":
             print("  Sensor {}: {}".format(sensor, value))
             soils.append(value)
 
+        print("  Temp={0:0.1f}*C  Humidity={1:0.1f}%  Soils={}".
+              format(temperature, humidity, soils))
         post_thingspeak(temperature, humidity, *soils)
 
     finally:
