@@ -24,7 +24,6 @@ HTTP_TRYS = 4
 
 def initialise():
     """Initialise output pins and devices"""
-    print("SENSORS? {}".format(SENSORS))
     if SENSORS:
         global SPI, spidev, GPIO, DHT
         import spidev
@@ -180,6 +179,8 @@ def read_command_line():
     args = parser.parse_args()
     global SENSORS
     SENSORS = args.n
+    if not SENSORS:
+        print("Not using sensors")
 
 if __name__ == "__main__":
     read_command_line()
