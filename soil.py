@@ -79,8 +79,8 @@ def read_a2d(i):
     # Read the sensor several times
     values = []
     for j in range(SENSOR_READINGS):
-        value = read_adc(0)
-        print("    Sensor {} reading #{}: {}".format(i, j, value))
+        values.append(read_adc(0))
+        print("    Sensor {} reading #{}: {}".format(i, j, values[-1]))
         time.sleep(0.1)
 
     # Now produce the average of the readings, removing the highest and lowest
