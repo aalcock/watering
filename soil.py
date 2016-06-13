@@ -147,7 +147,7 @@ if __name__ == "__main__":
             # print("  Sensor {}: {}".format(sensor, value))
             soils.append(value)
 
-        print("  Temp={0:0.1f}*C  Humidity={1:0.1f}%  Soils={}".
+        print("  Temp={0.1f}*C  Humidity={0.1f}%  Soils={}".
               format(temperature, humidity, soils))
         post_thingspeak(temperature, humidity, *soils)
 
