@@ -2,3 +2,6 @@ For the Python environment need a few libraries
 * Adafruit_DHT
 * py-spidev (RPi.GPIO)
 * Adafruit-Raspberry-Pi-Python-Code
+
+Python libraries
+* httplib
